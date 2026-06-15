@@ -25,6 +25,6 @@ public class AuthenticateUserService implements AuthenticateUser {
             throw new IllegalArgumentException("Invalid credentials");
         }
 
-        return jwtService.generateToken(user.getId(), user.getEmail());
+        return jwtService.generateToken(user.getId(), user.getEmail(), user.getRole().name());
     }
 }

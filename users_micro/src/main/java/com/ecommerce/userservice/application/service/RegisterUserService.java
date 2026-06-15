@@ -1,5 +1,6 @@
 package com.ecommerce.userservice.application.service;
 
+import com.ecommerce.userservice.domain.model.Role;
 import com.ecommerce.userservice.domain.model.User;
 import com.ecommerce.userservice.domain.port.in.RegisterUser;
 import com.ecommerce.userservice.domain.port.out.UserRepository;
@@ -25,6 +26,7 @@ public class RegisterUserService implements RegisterUser {
                 .lastname(lastname)
                 .email(email)
                 .password(passwordEncoder.encode(password))
+                .role(Role.USER)
                 .build();
 
         return userRepository.save(user);

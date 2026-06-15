@@ -1,5 +1,6 @@
 package com.ecommerce.userservice.infrastructure.adapter.out.db;
 
+import com.ecommerce.userservice.domain.model.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -32,6 +33,10 @@ public class UserEntity {
 
     @Column(nullable = false)
     private String password;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     @Column(nullable = false)
     private LocalDateTime createdAt;

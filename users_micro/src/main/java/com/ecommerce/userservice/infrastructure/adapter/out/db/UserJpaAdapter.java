@@ -1,5 +1,6 @@
 package com.ecommerce.userservice.infrastructure.adapter.out.db;
 
+import com.ecommerce.userservice.domain.model.Role;
 import com.ecommerce.userservice.domain.model.User;
 import com.ecommerce.userservice.domain.port.out.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,7 @@ public class UserJpaAdapter implements UserRepository {
                 .lastname(user.getLastname())
                 .email(user.getEmail())
                 .password(user.getPassword())
+                .role(user.getRole() != null ? user.getRole() : Role.USER)
                 .createdAt(user.getCreatedAt() != null ? user.getCreatedAt() : LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())
                 .build();
@@ -53,6 +55,7 @@ public class UserJpaAdapter implements UserRepository {
                 .lastname(entity.getLastname())
                 .email(entity.getEmail())
                 .password(entity.getPassword())
+                .role(entity.getRole())
                 .createdAt(entity.getCreatedAt())
                 .updatedAt(entity.getUpdatedAt())
                 .build();
