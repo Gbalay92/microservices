@@ -13,7 +13,7 @@ public class JwtService {
     private final SecretKey secretKey;
 
     public JwtService(@Value("${jwt.secret}") String secret) {
-        this.secretKey = Keys.hmacShaKeyFor(secret.getBytes());
+        this.secretKey = Keys.hmacShaKeyFor((secret.getBytes(java.nio.charset.StandardCharsets.UTF_8)));
     }
 
     public String extractEmail(String token) {
