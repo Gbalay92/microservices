@@ -1,7 +1,7 @@
 package com.ecommerce.orderservice.domain.port.in;
 
 import com.ecommerce.orderservice.domain.model.Order;
-import com.ecommerce.orderservice.domain.model.OrderItemRequest;
+import com.ecommerce.orderservice.infraestructure.adapter.in.web.OrderItemRequest;
 
 import java.util.List;
 import java.util.UUID;

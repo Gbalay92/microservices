@@ -31,7 +31,6 @@ public class OrderEntity {
     private UUID userId;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
-    @Column(nullable = false)
     @Setter
     private List<OrderItemEntity> items;
 

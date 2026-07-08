@@ -4,6 +4,7 @@ import com.ecommerce.orderservice.domain.model.*;
 import com.ecommerce.orderservice.domain.port.in.CreateOrder;
 import com.ecommerce.orderservice.domain.port.out.OrderRepository;
 import com.ecommerce.orderservice.domain.port.out.ProductClient;
+import com.ecommerce.orderservice.infraestructure.adapter.in.web.OrderItemRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +24,6 @@ public class CreateOrderService implements CreateOrder {
         List<OrderItem> orderItems = items.stream().map(req -> {
             ProductInfo product = productClient.findById(req.productId());
             return OrderItem.builder()
-                    .id(UUID.randomUUID())
                     .productId(req.productId())
                     .quantity(req.quantity())
                     .unitPrice(product.price())
@@ -35,7 +35,6 @@ public class CreateOrderService implements CreateOrder {
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
         return orderRepository.save(Order.builder()
-                .id(UUID.randomUUID())
                 .userId(userId)
                 .items(orderItems)
                 .totalPrice(totalPrice)

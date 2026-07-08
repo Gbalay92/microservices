@@ -56,7 +56,6 @@ public class OrderJpaAdapter implements OrderRepository {
 
     private OrderEntity toEntity(Order order) {
         OrderEntity entity = OrderEntity.builder()
-                .id(order.getId())
                 .userId(order.getUserId())
                 .totalPrice(order.getTotalPrice())
                 .status(order.getStatus())
@@ -65,7 +64,6 @@ public class OrderJpaAdapter implements OrderRepository {
 
         List<OrderItemEntity> items = order.getItems().stream().map(item ->
                 OrderItemEntity.builder()
-                        .id(item.getId())
                         .productId(item.getProductId())
                         .quantity(item.getQuantity())
                         .unitPrice(item.getUnitPrice())

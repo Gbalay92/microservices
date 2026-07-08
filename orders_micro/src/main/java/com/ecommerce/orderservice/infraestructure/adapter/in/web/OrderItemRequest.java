@@ -1,4 +1,4 @@
-package com.ecommerce.orderservice.domain.model;
+package com.ecommerce.orderservice.infraestructure.adapter.in.web;
 
 import java.util.UUID;
 
