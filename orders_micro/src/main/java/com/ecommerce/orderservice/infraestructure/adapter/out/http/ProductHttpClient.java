@@ -1,5 +1,6 @@
 package com.ecommerce.orderservice.infraestructure.adapter.out.http;
 
+import com.ecommerce.orderservice.domain.exception.ProductNotFoundException;
 import com.ecommerce.orderservice.domain.model.ProductInfo;
 import com.ecommerce.orderservice.domain.port.out.ProductClient;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +23,7 @@ public class ProductHttpClient implements ProductClient {
                 .body(ProductResponse.class);
 
         if (response == null) {
-            throw new RuntimeException("Product not found: " + productId);
+            throw new ProductNotFoundException(productId.toString());
         }
 
         return new ProductInfo(response.id(), response.price());

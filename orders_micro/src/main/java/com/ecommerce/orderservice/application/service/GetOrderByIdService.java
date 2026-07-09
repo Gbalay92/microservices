@@ -1,5 +1,7 @@
 package com.ecommerce.orderservice.application.service;
 
+import com.ecommerce.orderservice.domain.exception.AccessDeniedException;
+import com.ecommerce.orderservice.domain.exception.OrderNotFoundException;
 import com.ecommerce.orderservice.domain.model.Order;
 import com.ecommerce.orderservice.domain.port.in.GetOrderById;
 import com.ecommerce.orderservice.domain.port.out.OrderRepository;
@@ -17,10 +19,10 @@ public class GetOrderByIdService implements GetOrderById {
     @Override
     public Order execute(UUID orderId, UUID userId) {
         Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new RuntimeException("Order not found"));
+                .orElseThrow(() -> new OrderNotFoundException(orderId.toString()));
 
         if (!order.getUserId().equals(userId)) {
-            throw new RuntimeException("Access denied");
+            throw new AccessDeniedException();
         }
 
         return order;
