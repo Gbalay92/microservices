@@ -1,12 +1,12 @@
 package com.ecommerce.orderservice.infraestructure.adapter.in.web;
 
 
-import com.ecommerce.orderservice.domain.model.Order;
-import com.ecommerce.orderservice.domain.model.OrderItem;
+import com.ecommerce.orderservice.domain.model.OrderItemInput;
 import com.ecommerce.orderservice.domain.port.in.CreateOrder;
 import com.ecommerce.orderservice.domain.port.in.GetMyOrders;
 import com.ecommerce.orderservice.domain.port.in.GetOrderById;
 import jakarta.annotation.Nonnull;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -35,8 +35,10 @@ public class OrderController {
     }
 
     @PostMapping
-    public OrderResponse createOrder(@RequestBody OrderRequest orderRequest) {
-        return OrderResponse.from(createOrder.execute(getUserId(), orderRequest.items()));
+    public OrderResponse createOrder(@Valid @RequestBody OrderRequest orderRequest) {
+        return OrderResponse.from(createOrder.execute(getUserId(), orderRequest.items().stream().map(
+                i -> new OrderItemInput(i.productId(), i.quantity())
+        ).toList()));
     }
 
 

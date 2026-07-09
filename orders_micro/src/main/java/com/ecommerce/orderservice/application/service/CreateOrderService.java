@@ -4,7 +4,6 @@ import com.ecommerce.orderservice.domain.model.*;
 import com.ecommerce.orderservice.domain.port.in.CreateOrder;
 import com.ecommerce.orderservice.domain.port.out.OrderRepository;
 import com.ecommerce.orderservice.domain.port.out.ProductClient;
-import com.ecommerce.orderservice.infraestructure.adapter.in.web.OrderItemRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +19,7 @@ public class CreateOrderService implements CreateOrder {
     private final ProductClient productClient;
 
     @Override
-    public Order execute(UUID userId, List<OrderItemRequest> items) {
+    public Order execute(UUID userId, List<OrderItemInput> items) {
         List<OrderItem> orderItems = items.stream().map(req -> {
             ProductInfo product = productClient.findById(req.productId());
             return OrderItem.builder()
