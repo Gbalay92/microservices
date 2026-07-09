@@ -14,6 +14,7 @@ import reactor.core.publisher.Mono;
 
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
+import java.util.UUID;
 
 @Component
 public class JwtAuthFilter implements GlobalFilter, Ordered {
@@ -28,8 +29,18 @@ public class JwtAuthFilter implements GlobalFilter, Ordered {
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         String path = exchange.getRequest().getPath().value();
 
+        String correlationId = exchange.getRequest().getHeaders().getFirst("X-Correlation-Id");
+        if (correlationId == null) {
+            correlationId = UUID.randomUUID().toString();
+        }
+
         if (path.startsWith("/api/auth")) {
-            return chain.filter(exchange);
+            ServerWebExchange mutated = exchange.mutate()
+                    .request(exchange.getRequest().mutate()
+                            .header("X-Correlation-Id", correlationId)
+                            .build())
+                    .build();
+            return chain.filter(mutated);
         }
 
         String authHeader = exchange.getRequest().getHeaders().getFirst("Authorization");
@@ -46,12 +57,15 @@ public class JwtAuthFilter implements GlobalFilter, Ordered {
                     .parseSignedClaims(token)
                     .getPayload();
 
-            exchange.getRequest().mutate()
-                    .header("X-User-Id", claims.get("userId", String.class))
-                    .header("X-User-Role", claims.get("role", String.class))
+            ServerWebExchange mutated = exchange.mutate()
+                    .request(exchange.getRequest().mutate()
+                            .header("X-Correlation-Id", correlationId)
+                            .header("X-User-Id", claims.get("userId", String.class))
+                            .header("X-User-Role", claims.get("role", String.class))
+                            .build())
                     .build();
 
-            return chain.filter(exchange);
+            return chain.filter(mutated);
         } catch (Exception e) {
             exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
             return exchange.getResponse().setComplete();

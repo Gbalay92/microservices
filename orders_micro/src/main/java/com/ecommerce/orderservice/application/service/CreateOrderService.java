@@ -5,6 +5,8 @@ import com.ecommerce.orderservice.domain.port.in.CreateOrder;
 import com.ecommerce.orderservice.domain.port.out.OrderRepository;
 import com.ecommerce.orderservice.domain.port.out.ProductClient;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -17,9 +19,12 @@ public class CreateOrderService implements CreateOrder {
 
     private final OrderRepository orderRepository;
     private final ProductClient productClient;
+    private static final Logger log = LoggerFactory.getLogger(CreateOrderService.class);
 
     @Override
     public Order execute(UUID userId, List<OrderItemInput> items) {
+        log.info("Creating order for user {}", userId);
+
         List<OrderItem> orderItems = items.stream().map(req -> {
             ProductInfo product = productClient.findById(req.productId());
             return OrderItem.builder()

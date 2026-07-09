@@ -38,8 +38,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             String userId = jwtService.extractUserId(token);
             String role = jwtService.extractRole(token);
 
-
-
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                     userId,
                     null,
